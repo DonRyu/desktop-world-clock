@@ -11,7 +11,8 @@
     "test": "node test/dst.test.js",
     "icon": "node scripts/make-icon.js",
     "dist": "npm run icon && electron-builder --win nsis",
-    "build": "npm run dist"
+    "build": "npm run dist",
+    "store": "npm run icon && electron-builder --win dir && node scripts/make-msix.js"
   },
   "devDependencies": {
     "electron": "^43.4.0",
@@ -38,6 +39,18 @@
       "runAfterFinish": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true
+    },
+    "appx": {
+      "identityName": "DonRyu.DesktopWorldClockWidget",
+      "publisher": "CN=0A36C8E7-E870-4CA9-949E-81FDBBBF86B0",
+      "publisherDisplayName": "Don Ryu",
+      "applicationId": "DesktopWorldClockWidget",
+      "addAutoLaunchExtension": true,
+      "backgroundColor": "#0f1420",
+      "languages": [
+        "en-US"
+      ],
+      "displayName": "Desktop World Clock Widget"
     }
   }
 }

@@ -73,7 +73,15 @@ function registerBackgroundProtocol() {
 /* Autostart (background residency)                                    */
 /* ------------------------------------------------------------------ */
 
+// True when running from an MSIX/AppX package, i.e. the Microsoft Store build.
+const IS_STORE_BUILD = !!process.windowsStore;
+
 function applyAutoStart(enabled) {
+  // An MSIX app is sandboxed: writes to the registry Run key are virtualised and never take
+  // effect. Startup is declared in the manifest instead (windows.startupTask), and the user
+  // turns it on or off in Windows Settings > Apps > Startup.
+  if (IS_STORE_BUILD) return;
+
   const opts = { openAtLogin: !!enabled, name: 'World Clock Widget' };
   if (!app.isPackaged) {
     // Pass the app directory so a dev run (electron.exe .) also starts correctly.
@@ -293,17 +301,19 @@ function rebuildTrayMenu() {
       },
     },
     { label: 'Settings...', click: () => openSettings() },
-    {
-      label: 'Start with Windows',
-      type: 'checkbox',
-      checked: !!store.config.general.startWithWindows,
-      click: (item) => {
-        store.updateGeneral({ startWithWindows: item.checked });
-        applyAutoStart(item.checked);
-        rebuildTrayMenu();
-        pushState();
-      },
-    },
+    IS_STORE_BUILD
+      ? { label: 'Start with Windows: use Windows Settings > Startup', enabled: false }
+      : {
+          label: 'Start with Windows',
+          type: 'checkbox',
+          checked: !!store.config.general.startWithWindows,
+          click: (item) => {
+            store.updateGeneral({ startWithWindows: item.checked });
+            applyAutoStart(item.checked);
+            rebuildTrayMenu();
+            pushState();
+          },
+        },
     { type: 'separator' },
     { label: 'Quit', click: () => quitApp() },
   ]);
@@ -346,6 +356,7 @@ function registerIpc() {
     timeZones: zoneList(),
     systemZone: systemZone(),
     isPackaged: app.isPackaged,
+    isStoreBuild: IS_STORE_BUILD,
   }));
 
   ipcMain.handle('widget:update', (_e, id, patch) => {

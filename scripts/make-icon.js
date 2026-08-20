@@ -47,3 +47,26 @@ console.log(
   `wrote ${path.relative(process.cwd(), OUT)} ` +
     `(${SIZES.join(', ')} px, ${(fs.statSync(OUT).size / 1024).toFixed(1)} kB)`
 );
+
+/* ------------------------------------------------------------------ */
+/* Microsoft Store tiles                                               */
+/* ------------------------------------------------------------------ */
+//
+// electron-builder's appx target reads these four from build/appx. All are required.
+
+const { drawTile } = require('../src/main/icon.js');
+
+const TILES = [
+  ['StoreLogo.png', 50, 50],
+  ['Square150x150Logo.png', 150, 150],
+  ['Square44x44Logo.png', 44, 44],
+  ['Wide310x150Logo.png', 310, 150],
+];
+
+const APPX_DIR = path.join(__dirname, '..', 'build', 'appx');
+fs.mkdirSync(APPX_DIR, { recursive: true });
+
+for (const [name, w, h] of TILES) {
+  fs.writeFileSync(path.join(APPX_DIR, name), drawTile(w, h));
+  console.log(`wrote build/appx/${name} (${w}x${h})`);
+}

@@ -247,7 +247,7 @@ function buildShapes(size) {
   return { card, digits, dots, label, thickness };
 }
 
-function drawIcon(size) {
+function renderIcon(size) {
   const rgba = Buffer.alloc(size * size * 4);
   const { card, digits, dots, label, thickness } = buildShapes(size);
   const half = thickness / 2;
@@ -303,7 +303,36 @@ function drawIcon(size) {
     }
   }
 
-  return encodePng(size, size, rgba);
+  return rgba;
+}
+
+/** Square icon as a PNG. */
+function drawIcon(size) {
+  return encodePng(size, size, renderIcon(size));
+}
+
+/**
+ * Store tiles are not all square, and the artwork is. The square icon is rendered at the
+ * short edge and centred on a transparent canvas, which is how a wide tile is meant to
+ * carry a square logo.
+ */
+function drawTile(width, height, fill = 0.92) {
+  const inner = Math.max(8, Math.round(Math.min(width, height) * fill));
+  const src = renderIcon(inner);
+  const out = Buffer.alloc(width * height * 4);
+  const offX = Math.round((width - inner) / 2);
+  const offY = Math.round((height - inner) / 2);
+
+  for (let y = 0; y < inner; y++) {
+    const ty = y + offY;
+    if (ty < 0 || ty >= height) continue;
+    for (let x = 0; x < inner; x++) {
+      const tx = x + offX;
+      if (tx < 0 || tx >= width) continue;
+      src.copy(out, (ty * width + tx) * 4, (y * inner + x) * 4, (y * inner + x) * 4 + 4);
+    }
+  }
+  return encodePng(width, height, out);
 }
 
 let cached = null;
@@ -325,4 +354,4 @@ function trayIcon() {
   return img;
 }
 
-module.exports = { appIcon, trayIcon, drawIcon };
+module.exports = { appIcon, trayIcon, drawIcon, drawTile };

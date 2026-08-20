@@ -359,6 +359,14 @@ function onState(config) {
 
 api.getState().then((s) => {
   state = s;
+  if (s.isStoreBuild) {
+    // Windows owns startup for Store builds, so the checkbox would be a lie.
+    const box = $('startWithWindows');
+    box.disabled = true;
+    box.checked = false;
+    box.parentElement.lastElementChild.textContent =
+      'Start with Windows: set in Windows Settings > Apps > Startup';
+  }
   selectedId = s.config.widgets[0]?.id || null;
   fillStaticOptions();
   bindInputs();

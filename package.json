@@ -1,8 +1,8 @@
 {
   "name": "clock-widget",
-  "productName": "World Clock Widget",
+  "productName": "Desktop World Clock Widget",
   "version": "1.0.0",
-  "description": "Windows desktop World Clock Widget with per-widget timezone, DST, styling and always-on-top control",
+  "description": "Windows desktop world clock widgets with per-widget time zone, DST, styling and pin-on-top",
   "main": "src/main/main.js",
   "author": "Don Ryu",
   "license": "MIT",
@@ -21,7 +21,7 @@
   "build": {
     "appId": "com.donryu.clockwidget",
     "copyright": "Copyright (c) Don Ryu",
-    "productName": "World Clock Widget",
+    "productName": "Desktop World Clock Widget",
     "files": [
       "src/**/*",
       "package.json"
@@ -49,8 +49,7 @@
       "backgroundColor": "#0f1420",
       "languages": [
         "en-US"
-      ],
-      "displayName": "Desktop World Clock Widget"
+      ]
     }
   }
 }

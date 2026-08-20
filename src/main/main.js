@@ -82,7 +82,7 @@ function applyAutoStart(enabled) {
   // turns it on or off in Windows Settings > Apps > Startup.
   if (IS_STORE_BUILD) return;
 
-  const opts = { openAtLogin: !!enabled, name: 'World Clock Widget' };
+  const opts = { openAtLogin: !!enabled, name: 'Desktop World Clock Widget' };
   if (!app.isPackaged) {
     // Pass the app directory so a dev run (electron.exe .) also starts correctly.
     // Do NOT quote it: setLoginItemSettings escapes args itself, so our own quotes
@@ -226,7 +226,7 @@ function openSettings(focusId) {
     minWidth: 780,
     minHeight: 520,
     show: false,
-    title: 'World Clock Widget Settings',
+    title: 'Desktop World Clock Widget Settings',
     backgroundColor: '#12161f',
     icon: appIcon(),
     autoHideMenuBar: true,
@@ -287,7 +287,7 @@ function rebuildTrayMenu() {
   }));
 
   const menu = Menu.buildFromTemplate([
-    { label: 'World Clock Widget', enabled: false },
+    { label: 'Desktop World Clock Widget', enabled: false },
     { type: 'separator' },
     ...(widgetItems.length ? widgetItems : [{ label: '(no widgets)', enabled: false }]),
     { type: 'separator' },
@@ -319,7 +319,7 @@ function rebuildTrayMenu() {
   ]);
 
   tray.setContextMenu(menu);
-  tray.setToolTip('World Clock Widget');
+  tray.setToolTip('Desktop World Clock Widget');
 }
 
 function createTray() {
@@ -410,7 +410,7 @@ function registerIpc() {
       removeBackgroundFiles(id);
       fs.copyFileSync(src, path.join(BG_DIR, name));
     } catch (err) {
-      dialog.showErrorBox('World Clock Widget', `Could not use that image:\n${err.message}`);
+      dialog.showErrorBox('Desktop World Clock Widget', `Could not use that image:\n${err.message}`);
       return null;
     }
     const w = store.update(id, { style: { bgImage: name } });
@@ -554,6 +554,6 @@ app.whenReady().then(() => {
 process.on('uncaughtException', (err) => {
   console.error('[main] uncaught:', err);
   if (app.isReady()) {
-    dialog.showErrorBox('World Clock Widget error', String(err && err.stack ? err.stack : err));
+    dialog.showErrorBox('Desktop World Clock Widget error', String(err && err.stack ? err.stack : err));
   }
 });

@@ -1,4 +1,4 @@
-' World Clock Widget launcher - starts the app in the background with no console window.
+' Desktop World Clock Widget launcher - starts the app in the background with no console window.
 ' Double-click this file; everything else is managed from the tray icon.
 
 Dim fso, sh, base, exe
@@ -13,7 +13,7 @@ If Not fso.FileExists(exe) Then
          "Run these in this folder first:" & vbCrLf & _
          "  npm install" & vbCrLf & _
          "  node node_modules\electron\install.js", _
-         vbExclamation, "World Clock Widget"
+         vbExclamation, "Desktop World Clock Widget"
   WScript.Quit 1
 End If
 

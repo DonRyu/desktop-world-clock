@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: widget-bg:;" />
+    <title>World Clock Widget</title>
+    <link rel="stylesheet" href="widget.css" />
+  </head>
+  <body>
+    <div id="card">
+      <img id="bgImage" class="bg-image" alt="" hidden />
+      <div id="scrim" class="scrim" hidden></div>
+
+      <div class="content">
+        <div id="city" class="row city"></div>
+        <div class="row time-row">
+          <span id="time" class="time"></span>
+          <span id="meridiem" class="meridiem"></span>
+        </div>
+        <div id="date" class="row date"></div>
+        <div class="row meta">
+          <span id="zone" class="zone"></span>
+        </div>
+      </div>
+
+      <!-- Top-right tools. Icons are drawn from plain shapes, no external asset. -->
+      <div class="tools">
+        <button id="pin" class="tool" title="Pin on top (locks position)" aria-label="Pin on top">
+          <!-- Bootstrap Icons pin-angle / pin-angle-fill. MIT licence,
+               (c) 2019-2024 The Bootstrap Authors. https://icons.getbootstrap.com -->
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path class="pin-loose" d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a6 6 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707s.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a6 6 0 0 1 1.013.16l3.134-3.133a3 3 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146m.122 2.112v-.002zm0-.002v.002a.5.5 0 0 1-.122.51L6.293 6.878a.5.5 0 0 1-.511.12H5.78l-.014-.004a5 5 0 0 0-.288-.076 5 5 0 0 0-.765-.116c-.422-.028-.836.008-1.175.15l5.51 5.509c.141-.34.177-.753.149-1.175a5 5 0 0 0-.192-1.054l-.004-.013v-.001a.5.5 0 0 1 .12-.512l3.536-3.535a.5.5 0 0 1 .532-.115l.096.022c.087.017.208.034.344.034q.172.002.343-.04L9.927 2.028q-.042.172-.04.343a1.8 1.8 0 0 0 .062.46z" />
+            <path class="pin-stuck" d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a6 6 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707s.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a6 6 0 0 1 1.013.16l3.134-3.133a3 3 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146" />
+          </svg>
+        </button>
+        <button id="gear" class="tool" title="Settings" aria-label="Settings">
+          <svg viewBox="-12 -12 24 24" aria-hidden="true">
+            <g fill="currentColor">
+              <rect x="-1.9" y="-11.4" width="3.8" height="5.6" rx="1.2" />
+              <rect x="-1.9" y="-11.4" width="3.8" height="5.6" rx="1.2" transform="rotate(45)" />
+              <rect x="-1.9" y="-11.4" width="3.8" height="5.6" rx="1.2" transform="rotate(90)" />
+              <rect x="-1.9" y="-11.4" width="3.8" height="5.6" rx="1.2" transform="rotate(135)" />
+              <rect x="-1.9" y="-11.4" width="3.8" height="5.6" rx="1.2" transform="rotate(180)" />
+              <rect x="-1.9" y="-11.4" width="3.8" height="5.6" rx="1.2" transform="rotate(225)" />
+              <rect x="-1.9" y="-11.4" width="3.8" height="5.6" rx="1.2" transform="rotate(270)" />
+              <rect x="-1.9" y="-11.4" width="3.8" height="5.6" rx="1.2" transform="rotate(315)" />
+            </g>
+            <circle r="6.4" fill="none" stroke="currentColor" stroke-width="3.6" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Bottom-right grip: drag to scale the widget. -->
+      <div id="grip" class="grip" title="Drag to resize">
+        <svg viewBox="0 0 12 12" aria-hidden="true">
+          <g stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <line x1="11" y1="4" x2="4" y2="11" />
+            <line x1="11" y1="8" x2="8" y2="11" />
+          </g>
+        </svg>
+      </div>
+      <!-- Off-screen ruler used to size the card from reference text. -->
+      <span id="sizer" aria-hidden="true"></span>
+    </div>
+    <script src="cities.js"></script>
+    <script src="timelogic.js"></script>
+    <script src="widget.js"></script>
+  </body>
+</html>

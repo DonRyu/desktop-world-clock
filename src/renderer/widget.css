@@ -1,0 +1,226 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  overflow: hidden;
+  user-select: none;
+  cursor: default;
+}
+
+#card {
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  white-space: nowrap;
+  border-radius: 14px;
+  padding: 16px;
+  background: var(--bg, #0f1420);
+  color: var(--fg, #fff);
+  font-family: var(--font, 'Segoe UI', 'Malgun Gothic', sans-serif);
+  text-align: left;
+  overflow: hidden; /* clips the background image to the rounded corners */
+}
+
+/* Dragging is handled in JS; -webkit-app-region: drag would swallow the right-click menu. */
+#card:not(.locked) {
+  cursor: move;
+}
+
+/* The image fills the card at any size and is cropped, never squashed. */
+.bg-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  border: 0;
+}
+
+/* Must beat the rule above, otherwise a src-less <img> keeps rendering as a
+   broken-image box with a light border. */
+.bg-image[hidden],
+.scrim[hidden] {
+  display: none;
+}
+
+/* Keeps text readable over a busy photo. */
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.3));
+}
+
+.content {
+  position: relative;
+  width: var(--content-w, auto);
+}
+
+/* Measuring ruler: never painted, never part of the layout. */
+#sizer {
+  position: absolute;
+  visibility: hidden;
+  white-space: nowrap;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.row {
+  line-height: 1.18;
+}
+
+.row:empty {
+  display: none;
+}
+
+.city {
+  color: var(--fg, #fff);
+  font-size: var(--sub-size, 15px);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  /* Taller than the other rows on purpose: overflow:hidden clips to the line box, and the
+     1.18 used elsewhere cuts the descenders of g, y, p and j. */
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.time-row {
+  display: flex;
+  align-items: baseline;
+  font-size: var(--sub-size, 15px);
+  gap: 0.35em;
+}
+
+.time {
+  font-size: var(--size, 46px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+.meridiem {
+  font-size: var(--sub-size, 15px);
+  font-weight: 600;
+  color: var(--sub, #c3cfe2);
+}
+
+.meridiem:empty {
+  display: none;
+}
+
+.date {
+  font-size: var(--sub-size, 15px);
+  color: var(--sub, #c3cfe2);
+  margin-top: 2px;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  font-size: calc(var(--sub-size, 15px) * 0.86);
+  color: var(--sub, #c3cfe2);
+}
+
+.meta:empty {
+  display: none;
+}
+
+.zone:empty {
+  display: none;
+}
+
+/* ---- corner controls: absolutely positioned so they never affect the auto-fit size ---- */
+
+.tools {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: flex;
+  gap: 4px;
+}
+
+/* Hidden until the pointer is over the widget, then the hovered one goes full colour.
+   The pin also swaps to a filled white glyph while the widget is pinned. */
+.tool {
+  width: 26px;
+  height: 26px;
+  padding: 4px;
+  margin: 0;
+  border: 0;
+  border-radius: 7px;
+  background: rgba(128, 128, 128, 0.22);
+  color: var(--tool-dim, rgba(255, 255, 255, 0.45));
+  opacity: 0;
+  transition: opacity 0.12s ease, color 0.12s ease, background 0.12s ease;
+  cursor: pointer;
+  line-height: 0;
+}
+
+#card:hover .tool {
+  opacity: 1;
+}
+
+.tool:hover {
+  color: var(--fg, #fff);
+  background: rgba(128, 128, 128, 0.38);
+}
+
+/* Outline pin while loose, filled white pin once it is stuck down. Visibility still
+   follows the hover rule above; only the glyph and its colour change. */
+#card.locked #pin {
+  color: var(--fg, #fff);
+}
+
+.pin-stuck {
+  display: none;
+}
+
+#card.locked .pin-loose {
+  display: none;
+}
+
+#card.locked .pin-stuck {
+  display: block;
+}
+
+.grip {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  width: 15px;
+  height: 15px;
+  color: var(--tool-dim, rgba(255, 255, 255, 0.45));
+  opacity: 0;
+  transition: opacity 0.12s ease, color 0.12s ease;
+  cursor: nwse-resize;
+  line-height: 0;
+}
+
+#card:hover .grip,
+#card.resizing .grip {
+  opacity: 1;
+}
+
+.grip:hover,
+#card.resizing .grip {
+  color: var(--fg, #fff);
+}
+
+/* Pinned widgets cannot be moved or resized, so the grip goes away. */
+#card.locked .grip {
+  display: none;
+}
+
+.tool svg,
+.grip svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}

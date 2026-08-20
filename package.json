@@ -1,0 +1,43 @@
+{
+  "name": "clock-widget",
+  "productName": "World Clock Widget",
+  "version": "1.0.0",
+  "description": "Windows desktop World Clock Widget with per-widget timezone, DST, styling and always-on-top control",
+  "main": "src/main/main.js",
+  "author": "Don Ryu",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "test": "node test/dst.test.js",
+    "icon": "node scripts/make-icon.js",
+    "dist": "npm run icon && electron-builder --win nsis",
+    "build": "npm run dist"
+  },
+  "devDependencies": {
+    "electron": "^43.4.0",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "com.donryu.clockwidget",
+    "copyright": "Copyright (c) Don Ryu",
+    "productName": "World Clock Widget",
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": false,
+      "runAfterFinish": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}

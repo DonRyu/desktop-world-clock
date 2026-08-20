@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: widget-bg:;"
+    />
+    <title>World Clock Widget Settings</title>
+    <link rel="stylesheet" href="settings.css" />
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        <span class="dot"></span>
+        <strong>World Clock Widget</strong>
+        <span class="muted">Copyright &copy; Don Ryu</span>
+      </div>
+      <div class="header-actions">
+        <label class="switch">
+          <input type="checkbox" id="startWithWindows" />
+          <span>Start with Windows</span>
+        </label>
+        <button id="quitApp" class="danger ghost">Quit App</button>
+      </div>
+    </header>
+
+    <main>
+      <aside>
+        <div class="aside-head">
+          <span>Widgets</span>
+          <button id="addWidget" class="mini primary" title="Add widget">
+            +
+          </button>
+        </div>
+        <ul id="widgetList"></ul>
+        <div class="aside-foot">
+          <button id="dupWidget" class="mini">Duplicate</button>
+          <button id="delWidget" class="mini danger">Delete</button>
+        </div>
+      </aside>
+
+      <section id="editor">
+        <div id="empty" class="empty">No widgets yet. Click + to add one.</div>
+
+        <div id="form" hidden>
+          <fieldset>
+            <legend>City</legend>
+            <div class="grid">
+              <label class="field">
+                <span>Pick a city</span>
+                <select id="tzPreset"></select>
+              </label>
+              <label class="field">
+                <span>Name</span>
+                <input type="text" id="label" />
+              </label>
+            </div>
+            <p class="hint">Time zone: <em id="tzStatus"></em></p>
+          </fieldset>
+
+          <fieldset>
+            <legend>Show</legend>
+            <div class="checks">
+              <label class="check"
+                ><input type="checkbox" id="showCity" /><span
+                  >City name</span
+                ></label
+              >
+              <label class="check"
+                ><input type="checkbox" id="showDate" /><span>Date</span></label
+              >
+              <label class="check"
+                ><input type="checkbox" id="showSeconds" /><span
+                  >Seconds</span
+                ></label
+              >
+              <label class="check"
+                ><input type="checkbox" id="hour12" /><span
+                  >12-hour clock</span
+                ></label
+              >
+              <label class="check"
+                ><input type="checkbox" id="showZone" /><span
+                  >Time zone / UTC offset</span
+                ></label
+              >
+            </div>
+            <p class="hint">
+              The UTC offset already reflects summer time, and it switches on
+              its own when a city changes over.
+            </p>
+          </fieldset>
+
+          <fieldset>
+            <legend>Appearance</legend>
+            <div class="bg-row">
+              <div class="bg-preview" id="bgPreview"><span>No image</span></div>
+              <div class="bg-actions">
+                <span class="muted">Background image</span>
+                <div>
+                  <button id="pickBg" class="mini">Choose image...</button>
+                  <button id="clearBg" class="mini danger">Remove</button>
+                </div>
+                <small class="muted"
+                  >Scaled to fill the widget and cropped, never
+                  stretched.</small
+                >
+              </div>
+            </div>
+
+            <div class="grid">
+              <label class="field">
+                <span>Font</span>
+                <select id="fontFamily"></select>
+              </label>
+              <label class="field">
+                <span>Size <em id="fontSizeVal"></em></span>
+                <input type="range" id="fontSize" min="12" max="300" step="1" />
+              </label>
+              <label class="field">
+                <span>Text color</span>
+                <input type="color" id="textColor" />
+              </label>
+              <label class="field">
+                <span>Background color</span>
+                <input type="color" id="bgColor" />
+              </label>
+              <label class="field wide">
+                <span>Opacity <em id="opacityVal"></em></span>
+                <input
+                  type="range"
+                  id="opacity"
+                  min="0.1"
+                  max="1"
+                  step="0.01"
+                />
+              </label>
+              <label class="check wide">
+                <input type="checkbox" id="locked" />
+                <span
+                  >Pin on top &mdash; locks the position and keeps it above
+                  other windows</span
+                >
+              </label>
+            </div>
+          </fieldset>
+        </div>
+      </section>
+    </main>
+
+    <script src="cities.js"></script>
+    <script src="timelogic.js"></script>
+    <script src="settings.js"></script>
+  </body>
+</html>
